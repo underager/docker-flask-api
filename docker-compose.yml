@@ -12,33 +12,22 @@ services:
     networks:
       - spark-network
 
-  spark-worker-1:
+  spark-worker:
     image: bitnami/spark:3.5.1
-    hostname: spark-worker-1
-    container_name: spark-worker-1
+    hostname: spark-worker
+    # container_name: spark-worker-1
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
     networks:
       - spark-network
+    ports:
+      - "8081"  # Spark Worker UI (Docker assigns a random port on the host)
+      - "4040"  # Dynamically map Application UI ports (4040-4050)
     depends_on:
       - spark-master
-    ports:
-      - "8081:8081"  # Spark Worker UI
-
-  spark-worker-2:
-    image: bitnami/spark:3.5.1
-    hostname: spark-worker-2
-    container_name: spark-worker-2
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-    networks:
-      - spark-network
-    depends_on:
-      - spark-master
-    ports:
-      - "8082:8082"  # Spark Worker UI
+    # ports:
+    #   - "8081:8081"  # Spark Worker UI
 
   # Optional: Spark History Server
   spark-history:
@@ -66,8 +55,7 @@ services:
       - spark-network  # Same network to allow communication with Spark cluster
     depends_on:
       - spark-master
-      - spark-worker-1
-      - spark-worker-2
+      - spark-worker
 
 networks:
   spark-network:

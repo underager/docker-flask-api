@@ -1,6 +1,7 @@
 # Dockerfile for the Flask API
-FROM python:3.11-slim-bullseye
+# FROM python:3.11-slim-bullseye
 
+FROM bitnami/python:3.11
 # Set working directory
 WORKDIR /app
 
